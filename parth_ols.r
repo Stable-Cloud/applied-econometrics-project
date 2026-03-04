@@ -47,8 +47,76 @@ cat("Total observations:", nrow(data), "\n")
 # is associated with higher BMI,
 # and whether this effect differs by residence.
 ############################################################
+############################################################
+# SECTION 2A: SAMPLE DATA DESCRIPTION OUTPUT
+############################################################
 
+cat("\n================ SAMPLE DESCRIPTION ================\n")
 
+# Sample size
+cat("Total observations:", nrow(data), "\n")
+
+# Missing values summary
+cat("\nMissing Values (Key Variables):\n")
+key_vars <- c("bmi","improved_toilet","urban",
+              "education_level","wealth",
+              "children_born","age_first_birth")
+
+print(colSums(is.na(data[key_vars])))
+
+# Continuous variables summary
+# Continuous variables summary
+cat("\nContinuous Variables Summary:\n")
+
+cont_vars <- c("bmi","age","children_born","age_first_birth")
+
+cont_summary <- data.frame(
+  Variable = cont_vars,
+  Mean = sapply(data[cont_vars], mean, na.rm=TRUE),
+  SD   = sapply(data[cont_vars], sd, na.rm=TRUE),
+  Min  = sapply(data[cont_vars], min, na.rm=TRUE),
+  Max  = sapply(data[cont_vars], max, na.rm=TRUE)
+)
+
+# Round only numeric columns
+cont_summary[, -1] <- round(cont_summary[, -1], 3)
+
+print(cont_summary)
+
+# Proportion with improved sanitation
+cat("\nProportion with Improved Toilet:",
+    round(mean(data$improved_toilet, na.rm=TRUE),3), "\n")
+
+cat("\nUrban Distribution (%):\n")
+print(round(prop.table(table(data$urban))*100, 2))
+
+# Education distribution
+cat("\nEducation Distribution (%):\n")
+print(round(prop.table(table(data$education_level))*100,2))
+
+# Wealth distribution
+cat("\nWealth Distribution (%):\n")
+print(round(prop.table(table(data$wealth))*100,2))
+
+cat("\n====================================================\n")
+
+############################################################
+# GRAPH MATRIX USING SAMPLE (FASTER)
+############################################################
+
+set.seed(123)
+
+sample_data <- data[sample(1:nrow(data), 5000), ]
+
+scatterplotMatrix(
+  ~ bmi + age + children_born + age_first_birth,
+  data = sample_data,
+  smooth = TRUE,
+  regLine = TRUE,
+  pch = 16,
+  cex = 0.5,
+  main = "Scatterplot Matrix with Linear Fit (Sample)"
+)
 ############################################################
 # SECTION 3: VARIABLE CONSTRUCTION
 ############################################################
