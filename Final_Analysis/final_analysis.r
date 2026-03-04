@@ -21,10 +21,11 @@
 required_packages <- c("car","lmtest","sandwich",
                        "stargazer","nortest","tseries","moments")
 
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
 for (pkg in required_packages) {
   if (!require(pkg, character.only = TRUE, quietly = TRUE)) {
-    install.packages(pkg, repos = "https://cran.r-project.org",
-                     dependencies = TRUE)
+    install.packages(pkg, dependencies = TRUE)
     library(pkg, character.only = TRUE)
   }
 }
