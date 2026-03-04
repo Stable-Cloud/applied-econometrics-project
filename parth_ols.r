@@ -117,6 +117,19 @@ scatterplotMatrix(
   cex = 0.5,
   main = "Scatterplot Matrix with Linear Fit (Sample)"
 )
+boxplot(bmi ~ improved_toilet,
+        data = data,
+        col = c("tomato","steelblue"),
+        names = c("No Improved Toilet","Improved Toilet"),
+        main = "BMI by Sanitation Access",
+        ylab = "BMI (kg/m²)")
+
+boxplot(bmi ~ improved_toilet * urban,
+        data = data,
+        col = c("tomato","steelblue","orange","darkgreen"),
+        names = c("Rural-No","Rural-Yes","Urban-No","Urban-Yes"),
+        main = "BMI by Sanitation and Urban Status",
+        ylab = "BMI (kg/m²)")
 ############################################################
 # SECTION 3: VARIABLE CONSTRUCTION
 ############################################################
