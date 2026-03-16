@@ -135,13 +135,14 @@ The following derived variables are created during analysis:
 
 This dataset is used to analyze **the impact of improved sanitation on BMI** with three econometric models:
 
-1. **M13** (Primary Model) — Urban-Rural Heterogeneity Model
+1. **M13 (Primary Model)** — Urban-Rural Heterogeneity Model
    - Tests whether sanitation effects differ between urban and rural areas
-   - Specification: `BMI ~ improved_toilet × urban + age + education + wealth + caste + religion + children + state FE`
+   - Specification: $$\text{BMI} = \beta_0 + \beta_1 \text{Toilet} + \beta_2 \text{Urban} + \beta_3 (\text{Toilet} \times \text{Urban}) + \text{Controls}$$
+   - Controls: age, education, wealth, caste, religion, children, state FE
 
 2. **M7** — Regional Fixed Effects Model
    - Controls for regional unobserved heterogeneity
-   - Specification: `BMI ~ improved_toilet + age + education + wealth + region FE`
+   - Specification: Same as M13 but with region FE instead of state FE
 
 3. **A5** — Comprehensive Interaction Model
    - Captures non-linear and heterogeneous effects

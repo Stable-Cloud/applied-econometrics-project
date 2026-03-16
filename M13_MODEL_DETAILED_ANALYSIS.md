@@ -12,23 +12,24 @@ The M13 model is a linear regression analysis examining the relationship between
 
 The M13 model is specified as follows:
 
-$$\text{BMI} = \beta_0 + \beta_1 \cdot \text{improved\_toilet} + \beta_2 \cdot \text{urban} + \beta_3 (\text{improved\_toilet} \times \text{urban})$$
-$$+ \beta_4 \text{age\_c} + \beta_5 \text{age\_c}^2 + \sum \beta_j \text{education\_level}_j + \sum \beta_j \text{wealth}_j$$
-$$+ \sum \beta_j \text{caste}_j + \sum \beta_j \text{religion}_j + \beta_k \text{children\_c} + \beta_l \text{afb\_c} + \sum \beta_m \text{state}_m + \epsilon$$
+$$\text{BMI} = \beta_0 + \beta_1 \text{Toilet} + \beta_2 \text{Urban} + \beta_3 (\text{Toilet} \times \text{Urban})$$
+$$+ \beta_4 \text{Age}_c + \beta_5 \text{Age}_c^2 + \sum_{j} \beta_j \text{Education}_j + \sum_{j} \beta_j \text{Wealth}_j$$
+$$+ \sum_{j} \beta_j \text{Caste}_j + \sum_{j} \beta_j \text{Religion}_j + \beta_k \text{Children}_c + \beta_l \text{AFB}_c + \sum_{m} \beta_m \text{State}_m + \epsilon$$
 
 **Where:**
 - **Dependent Variable:** BMI (Body Mass Index, continuous, measured in kg/m²)
-- **Key Explanatory Variable:** `improved_toilet` (binary: 1 = improved sanitation, 0 = otherwise)
-- **Interaction Term:** `improved_toilet × urban` (captures heterogeneous effects by urbanization)
+- **Key Explanatory Variable:** Toilet = improved sanitation access (binary: 1 = improved, 0 = otherwise)
+- **Interaction Term:** Toilet × Urban (captures heterogeneous effects by urbanization)
 - **Control Variables:** 
-  - Age effects (centered age and squared age term for non-linearity)
-  - Educational level (4 categories: no education, primary, secondary, higher)
-  - Wealth quintiles (five categories representing household economic status)
-  - Caste categories (social stratification)
-  - Religion categories
-  - Number of children (centered)
-  - Age at first birth (centered)
-  - State fixed effects (28 state dummies) for geographic heterogeneity
+  - Age effects (Age_c = centered age; Age_c² = squared centered age for non-linearity)
+  - Education (Education_j = 4 categories: no education, primary, secondary, higher)
+  - Wealth (Wealth_j = 5 quintiles from poorest to richest)
+  - Caste (categorical)
+  - Religion (categorical)
+  - Children (Children_c = centered number of children born)
+  - AFB_c (Age at First Birth, centered)
+  - State (State_m = 28 state fixed effects) for geographic heterogeneity
+  - ε = error term
 
 ### 1.2 Data Summary
 

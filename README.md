@@ -114,10 +114,10 @@ Rscript visualizations.r
 ## 🔍 Model Specification: M13 (Preferred Model)
 
 ### Equation
-```
-BMI ~ improved_toilet × urban + age_c + age_c² + education_level + wealth + 
-      caste + religion + children_c + age_first_birth_c + state_FE
-```
+
+$$\text{BMI} = \beta_0 + \beta_1 \text{Toilet} + \beta_2 \text{Urban} + \beta_3 (\text{Toilet} \times \text{Urban}) + \text{Controls} + \epsilon$$
+
+**Where:** Toilet = improved sanitation, Urban = urban residence, Controls include age, education, wealth, caste, religion, children, state FE
 
 ### Key Features
 
