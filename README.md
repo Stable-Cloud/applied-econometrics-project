@@ -29,6 +29,7 @@ This project analyzes the relationship between improved sanitation access and wo
 ```
 .
 ├── README.md                              ← This file
+├── VISUALIZATIONS.md                      ← Diagnostic plots & figures (VIEW THESE!)
 ├── DATA_DESCRIPTION.md                    ← Detailed data documentation
 ├── M13_MODEL_DETAILED_ANALYSIS.md         ← Comprehensive analysis report
 ├── final_sanitation_bmi_dataset.csv       ← Cleaned dataset (480,052 obs)
@@ -36,8 +37,8 @@ This project analyzes the relationship between improved sanitation access and wo
 ├── final_analysis.r                       ← Main model comparison script
 ├── final_models.r                         ← Detailed model specifications
 ├── m13_validation.r                       ← Diagnostic tests and validation
-├── visualizations.r                       ← Diagnostic plots and figures
-└── Rplots.pdf                            ← Generated diagnostic plots
+├── visualizations.r                       ← Generates diagnostic plots
+└── plots/                                 ← PNG visualization files
 ```
 
 ---
@@ -99,9 +100,10 @@ Rscript m13_validation.r
   - Scatterplot matrices with regression lines
   - BMI distribution by sanitation access
   - Heterogeneous effects (sanitation × urban)
-  - Residual diagnostics (QQ plots, scale-location, Cook's distance)
-  - Prediction accuracy visualizations
-- **Output:** Saves plots to `Rplots.pdf` and display variables in R environment
+  - Residual diagnostics (QQ plots, scale-location, residual distributions)
+  - Diagnostic tests visualization
+- **Output:** Saves 8 high-quality PNG files to `plots/` directory
+- **Display:** Open [VISUALIZATIONS.md](VISUALIZATIONS.md) to view all plots with full interpretations
 - **Run Time:** ~2 minutes
 - **Dependencies:** `car`, `ggplot2`, `gridExtra`, plus all others
 
@@ -277,10 +279,12 @@ Rscript visualizations.r
 
 | Script | Output Files | Console Output |
 |--------|--------------|----------------|
-| final_analysis.r | Rplots.pdf (figures) | Model summaries, descriptive stats |
-| final_models.r | Rplots.pdf (appended) | Regression tables, model comparisons |
+| final_analysis.r | None | Model summaries, descriptive stats |
+| final_models.r | None | Regression tables, model comparisons |
 | m13_validation.r | None | Detailed diagnostic test results |
-| visualizations.r | Rplots.pdf (appended) | Diagnostic plots saved to PDF |
+| visualizations.r | plots/*.png (8 files) | PNG files saved to plots/ directory |
+
+**📊 View Results:** See [VISUALIZATIONS.md](VISUALIZATIONS.md) to display all plots with interpretations
 
 ---
 

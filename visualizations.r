@@ -77,8 +77,13 @@ cat("Models estimated successfully.\n")
 
 cat("\n--- Creating Descriptive Visualizations ---\n")
 
+# Create plots directory if it doesn't exist
+if (!dir.exists("plots")) {
+  dir.create("plots")
+}
+
 # 1.1 BMI Distribution by Sanitation Access
-pdf("Final_Analysis/plot1_bmi_distribution.pdf", width = 10, height = 6)
+png("plots/01_bmi_distribution.png", width = 1000, height = 600, res = 100)
 par(mfrow = c(1, 2))
 
 # Histogram
@@ -100,10 +105,10 @@ boxplot(bmi ~ improved_toilet, data = data,
         outline = FALSE)
 
 dev.off()
-cat("Created: plot1_bmi_distribution.pdf\n")
+cat("Created: plots/01_bmi_distribution.png\n")
 
 # 1.2 BMI by Urban/Rural and Sanitation
-pdf("Final_Analysis/plot2_urban_rural_comparison.pdf", width = 10, height = 6)
+png("plots/02_urban_rural_comparison.png", width = 1000, height = 600, res = 100)
 par(mfrow = c(1, 2))
 
 # Rural
@@ -123,20 +128,20 @@ boxplot(bmi ~ improved_toilet, data = data[data$urban == "urban", ],
         outline = FALSE)
 
 dev.off()
-cat("Created: plot2_urban_rural_comparison.pdf\n")
+cat("Created: plots/02_urban_rural_comparison.png\n")
 
 # 1.3 BMI by Wealth Quintile
-pdf("Final_Analysis/plot3_wealth_distribution.pdf", width = 10, height = 6)
+png("plots/03_wealth_distribution.png", width = 1000, height = 600, res = 100)
 boxplot(bmi ~ wealth, data = data,
         main = "BMI Distribution by Wealth Quintile",
         xlab = "Wealth Quintile", ylab = "BMI (kg/m²)",
         col = c("#d73027", "#fc8d59", "#fee090", "#91bfdb", "#4575b4"),
         outline = FALSE)
 dev.off()
-cat("Created: plot3_wealth_distribution.pdf\n")
+cat("Created: plots/03_wealth_distribution.png\n")
 
 # 1.4 Sample Scatterplot Matrix (using sample for speed)
-pdf("Final_Analysis/plot4_scatterplot_matrix.pdf", width = 12, height = 12)
+png("plots/04_scatterplot_matrix.png", width = 1200, height = 1200, res = 100)
 set.seed(123)
 sample_data <- data[sample(1:nrow(data), 5000), ]
 scatterplotMatrix(~ bmi + age + children_born + age_first_birth,
@@ -145,7 +150,7 @@ scatterplotMatrix(~ bmi + age + children_born + age_first_birth,
                   pch = 16, cex = 0.5,
                   main = "Scatterplot Matrix: Key Variables (n=5000 sample)")
 dev.off()
-cat("Created: plot4_scatterplot_matrix.pdf\n")
+cat("Created: plots/04_scatterplot_matrix.png\n")
 
 ################################################################################
 # SECTION 2: MODEL DIAGNOSTICS - M13 (FINAL MODEL)
@@ -153,15 +158,34 @@ cat("Created: plot4_scatterplot_matrix.pdf\n")
 
 cat("\n--- Creating Diagnostic Plots for M13 (Final Model) ---\n")
 
-# 2.1 Standard Diagnostic Plots
-pdf("Final_Analysis/plot5_M13_diagnostics.pdf", width = 12, height = 10)
-par(mfrow = c(2, 2))
-plot(M13, which = 1:4, main = "M13: Urban-Rural Heterogeneity Model")
+# 2.1 Standard Diagnostic Plots (4-panel)
+png("plots/05_M13_diagnostics.png", width = 1200, height = 1000, res = 100)
+par(mfrow = c(2, 2), mar = c(5, 4, 3, 2))
+
+# Panel 1: Residuals vs Fitted
+plot(fitted(M13), residuals(M13), pch = 16, cex = 0.3, col = rgb(0,0,1,0.2),
+     main = "M13: Residuals vs Fitted", xlab = "Fitted Values", ylab = "Residuals")
+abline(h = 0, col = "red", lwd = 2)
+
+# Panel 2: Normal Q-Q Plot
+qqnorm(residuals(M13), pch = 16, cex = 0.3, col = rgb(0,0,1,0.2), main = "Normal Q-Q Plot")
+qqline(residuals(M13), col = "red", lwd = 2)
+
+# Panel 3: Scale-Location
+plot(fitted(M13), sqrt(abs(rstandard(M13))), pch = 16, cex = 0.3, col = rgb(0,0,1,0.2),
+     main = "Scale-Location Plot", xlab = "Fitted Values", ylab = "√|Std. Residuals|")
+
+# Panel 4: Residuals Histogram
+hist(residuals(M13), breaks = 50, col = "steelblue", border = "white",
+     main = "Residuals Distribution", xlab = "Residuals", freq = FALSE)
+curve(dnorm(x, mean = mean(residuals(M13)), sd = sd(residuals(M13))),
+      add = TRUE, col = "red", lwd = 2)
+
 dev.off()
-cat("Created: plot5_M13_diagnostics.pdf\n")
+cat("Created: plots/05_M13_diagnostics.png\n")
 
 # 2.2 Residuals Histogram
-pdf("Final_Analysis/plot6_M13_residuals_hist.pdf", width = 10, height = 6)
+png("plots/06_M13_residuals_histogram.png", width = 1000, height = 600, res = 100)
 hist(residuals(M13), breaks = 100, col = "steelblue", border = "white",
      main = "M13: Distribution of Residuals",
      xlab = "Residuals", freq = FALSE)
@@ -171,25 +195,25 @@ legend("topright", c("Residuals", "Normal Distribution"),
        fill = c("steelblue", NA), border = c("black", NA),
        lty = c(NA, 1), col = c(NA, "red"), lwd = c(NA, 2))
 dev.off()
-cat("Created: plot6_M13_residuals_hist.pdf\n")
+cat("Created: plots/06_M13_residuals_histogram.png\n")
 
 # 2.3 Q-Q Plot (detailed)
-pdf("Final_Analysis/plot7_M13_qq_plot.pdf", width = 8, height = 8)
+png("plots/07_M13_qq_plot.png", width = 800, height = 800, res = 100)
 qqnorm(residuals(M13), pch = 16, cex = 0.5, col = rgb(0,0,1,0.3),
        main = "M13: Normal Q-Q Plot")
 qqline(residuals(M13), col = "red", lwd = 2)
 dev.off()
-cat("Created: plot7_M13_qq_plot.pdf\n")
+cat("Created: plot7_M13_qq_plot.png\n")
 
 # 2.4 Scale-Location Plot
-pdf("Final_Analysis/plot8_M13_scale_location.pdf", width = 10, height = 6)
+png("plots/08_M13_scale_location.png", width = 1000, height = 600, res = 100)
 plot(fitted(M13), sqrt(abs(rstandard(M13))),
      pch = 16, cex = 0.3, col = rgb(0,0,1,0.2),
      xlab = "Fitted Values", ylab = "√|Standardized Residuals|",
      main = "M13: Scale-Location Plot (Homoskedasticity Check)")
 abline(h = mean(sqrt(abs(rstandard(M13)))), col = "red", lwd = 2)
 dev.off()
-cat("Created: plot8_M13_scale_location.pdf\n")
+cat("Created: plot8_M13_scale_location.png\n")
 
 ################################################################################
 # SECTION 3: MODEL COMPARISON VISUALIZATIONS
@@ -198,7 +222,7 @@ cat("Created: plot8_M13_scale_location.pdf\n")
 cat("\n--- Creating Model Comparison Visualizations ---\n")
 
 # 3.1 R-squared Comparison
-pdf("Final_Analysis/plot9_model_comparison_rsq.pdf", width = 10, height = 6)
+png("plots/09_model_comparison_rsq.png", width = 1000, height = 600, res = 100)
 r_squared <- c(summary(M13)$r.squared, summary(M7)$r.squared, summary(A5)$r.squared)
 adj_r_squared <- c(summary(M13)$adj.r.squared, summary(M7)$adj.r.squared, summary(A5)$adj.r.squared)
 
@@ -212,10 +236,10 @@ barplot(rbind(r_squared, adj_r_squared),
         legend.text = c("R²", "Adjusted R²"),
         args.legend = list(x = "topright"))
 dev.off()
-cat("Created: plot9_model_comparison_rsq.pdf\n")
+cat("Created: plot9_model_comparison_rsq.png\n")
 
 # 3.2 AIC/BIC Comparison
-pdf("Final_Analysis/plot10_model_comparison_ic.pdf", width = 10, height = 6)
+png("plots/10_model_comparison_ic.png", width = 1000, height = 600, res = 100)
 aic_vals <- c(AIC(M13), AIC(M7), AIC(A5))
 bic_vals <- c(BIC(M13), BIC(M7), BIC(A5))
 
@@ -232,10 +256,10 @@ barplot(rbind(aic_norm, bic_norm),
         legend.text = c("AIC", "BIC"),
         args.legend = list(x = "topright"))
 dev.off()
-cat("Created: plot10_model_comparison_ic.pdf\n")
+cat("Created: plot10_model_comparison_ic.png\n")
 
 # 3.3 RMSE Comparison
-pdf("Final_Analysis/plot11_model_comparison_rmse.pdf", width = 10, height = 6)
+png("plots/11_model_comparison_rmse.png", width = 1000, height = 600, res = 100)
 rmse_vals <- c(sqrt(mean(residuals(M13)^2)),
                sqrt(mean(residuals(M7)^2)),
                sqrt(mean(residuals(A5)^2)))
@@ -249,7 +273,7 @@ barplot(rmse_vals,
 text(x = seq(0.7, by = 1.2, length.out = 3), y = rmse_vals + 0.05,
      labels = round(rmse_vals, 4), pos = 3)
 dev.off()
-cat("Created: plot11_model_comparison_rmse.pdf\n")
+cat("Created: plot11_model_comparison_rmse.png\n")
 
 ################################################################################
 # SECTION 4: COEFFICIENT PLOTS
@@ -258,7 +282,7 @@ cat("Created: plot11_model_comparison_rmse.pdf\n")
 cat("\n--- Creating Coefficient Visualization ---\n")
 
 # 4.1 Key Coefficient Comparison with Confidence Intervals
-pdf("Final_Analysis/plot12_coefficient_comparison.pdf", width = 12, height = 8)
+png("plots/12_coefficient_comparison.png", width = 1200, height = 800, res = 100)
 
 # Extract coefficients and CIs
 get_toilet_coef <- function(model, model_name) {
@@ -309,7 +333,7 @@ abline(v = 0, lty = 2, col = "red")
 grid()
 
 dev.off()
-cat("Created: plot12_coefficient_comparison.pdf\n")
+cat("Created: plot12_coefficient_comparison.png\n")
 
 ################################################################################
 # SECTION 5: INTERACTION EFFECTS VISUALIZATION
@@ -318,7 +342,7 @@ cat("Created: plot12_coefficient_comparison.pdf\n")
 cat("\n--- Creating Interaction Effect Plots ---\n")
 
 # 5.1 M13: Urban-Rural Interaction Effect
-pdf("Final_Analysis/plot13_M13_interaction_effect.pdf", width = 10, height = 6)
+png("plots/13_M13_interaction_effect.png", width = 1000, height = 600, res = 100)
 
 # Calculate mean BMI by sanitation and urban status
 means_data <- aggregate(bmi ~ improved_toilet + urban, data = data, FUN = mean)
@@ -338,10 +362,10 @@ legend("topleft", c("Rural", "Urban"),
 grid()
 
 dev.off()
-cat("Created: plot13_M13_interaction_effect.pdf\n")
+cat("Created: plot13_M13_interaction_effect.png\n")
 
 # 5.2 Predicted BMI by Wealth and Sanitation (from A5)
-pdf("Final_Analysis/plot14_wealth_sanitation_interaction.pdf", width = 10, height = 6)
+png("plots/14_wealth_sanitation_interaction.png", width = 1000, height = 600, res = 100)
 
 # Create prediction data
 wealth_levels <- levels(data$wealth)
@@ -378,7 +402,7 @@ legend("topleft", c("No Improved Toilet", "Improved Toilet"),
 grid()
 
 dev.off()
-cat("Created: plot14_wealth_sanitation_interaction.pdf\n")
+cat("Created: plot14_wealth_sanitation_interaction.png\n")
 
 ################################################################################
 # SECTION 6: REGIONAL VARIATION (M7)
@@ -387,7 +411,7 @@ cat("Created: plot14_wealth_sanitation_interaction.pdf\n")
 cat("\n--- Creating Regional Variation Plots ---\n")
 
 # 6.1 Regional Fixed Effects
-pdf("Final_Analysis/plot15_regional_effects.pdf", width = 14, height = 8)
+png("plots/15_regional_effects.png", width = 1400, height = 800, res = 100)
 
 # Extract regional coefficients from M7
 regional_coefs <- coef(M7)[grep("^region", names(coef(M7)))]
@@ -401,7 +425,7 @@ barplot(sort(regional_coefs), las = 2, col = "skyblue",
 abline(h = 0, col = "red", lwd = 2)
 
 dev.off()
-cat("Created: plot15_regional_effects.pdf\n")
+cat("Created: plot15_regional_effects.png\n")
 
 ################################################################################
 # SECTION 7: SUMMARY VISUALIZATION
@@ -410,7 +434,7 @@ cat("Created: plot15_regional_effects.pdf\n")
 cat("\n--- Creating Summary Visualization ---\n")
 
 # 7.1 Comprehensive Summary Plot
-pdf("Final_Analysis/plot16_comprehensive_summary.pdf", width = 16, height = 10)
+png("plots/16_comprehensive_summary.png", width = 1600, height = 1000, res = 100)
 
 par(mfrow = c(2, 3))
 
@@ -447,7 +471,7 @@ barplot(coefs, names.arg = c("M13", "M7", "A5"), col = "coral",
         main = "Sanitation Coefficient", ylab = "BMI units")
 
 dev.off()
-cat("Created: plot16_comprehensive_summary.pdf\n")
+cat("Created: plot16_comprehensive_summary.png\n")
 
 ################################################################################
 # COMPLETION MESSAGE
@@ -457,32 +481,32 @@ cat("\n\n=======================================================================
 cat("                    VISUALIZATION SUITE COMPLETE                                \n")
 cat("================================================================================\n")
 
-cat("\nGenerated 16 visualization files in Final_Analysis/ folder:\n")
+cat("\nGenerated 16 visualization files in plots/ folder:\n")
 cat("\nDescriptive Plots:\n")
-cat("  1. plot1_bmi_distribution.pdf\n")
-cat("  2. plot2_urban_rural_comparison.pdf\n")
-cat("  3. plot3_wealth_distribution.pdf\n")
-cat("  4. plot4_scatterplot_matrix.pdf\n")
+cat("  1. 01_bmi_distribution.png\n")
+cat("  2. 02_urban_rural_comparison.png\n")
+cat("  3. 03_wealth_distribution.png\n")
+cat("  4. 04_scatterplot_matrix.png\n")
 
 cat("\nM13 Diagnostic Plots:\n")
-cat("  5. plot5_M13_diagnostics.pdf\n")
-cat("  6. plot6_M13_residuals_hist.pdf\n")
-cat("  7. plot7_M13_qq_plot.pdf\n")
-cat("  8. plot8_M13_scale_location.pdf\n")
+cat("  5. 05_M13_diagnostics.png\n")
+cat("  6. 06_M13_residuals_histogram.png\n")
+cat("  7. 07_M13_qq_plot.png\n")
+cat("  8. 08_M13_scale_location.png\n")
 
 cat("\nModel Comparison Plots:\n")
-cat("  9. plot9_model_comparison_rsq.pdf\n")
-cat(" 10. plot10_model_comparison_ic.pdf\n")
-cat(" 11. plot11_model_comparison_rmse.pdf\n")
-cat(" 12. plot12_coefficient_comparison.pdf\n")
+cat("  9. 09_model_comparison_rsq.png\n")
+cat(" 10. 10_model_comparison_ic.png\n")
+cat(" 11. 11_model_comparison_rmse.png\n")
+cat(" 12. 12_coefficient_comparison.png\n")
 
 cat("\nInteraction & Regional Plots:\n")
-cat(" 13. plot13_M13_interaction_effect.pdf\n")
-cat(" 14. plot14_wealth_sanitation_interaction.pdf\n")
-cat(" 15. plot15_regional_effects.pdf\n")
+cat(" 13. 13_M13_interaction_effect.png\n")
+cat(" 14. 14_wealth_sanitation_interaction.png\n")
+cat(" 15. 15_regional_effects.png\n")
 
 cat("\nSummary:\n")
-cat(" 16. plot16_comprehensive_summary.pdf\n")
+cat(" 16. 16_comprehensive_summary.png\n")
 
 cat("\n================================================================================\n")
 cat("All visualizations ready for presentation and publication.\n")
