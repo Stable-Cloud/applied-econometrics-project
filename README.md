@@ -155,7 +155,7 @@ BMI ~ improved_toilet × urban + age_c + age_c² + education_level + wealth +
 | Test | Verdict | Reason |
 |------|---------|--------|
 | **F-test (Overall Model)** | PASS | F = 1,699.76, p < 0.001 |
-| **Multicollinearity (VIF)** | PASS | Max VIF = 3.73 < 5 |
+| **Multicollinearity (GVIF)** | PASS | Max Adjusted GVIF^(1/(2*Df)) = 3.73 < 5 |
 | **Durbin-Watson** | PASS | DW = 1.924 ≈ 2.0 (no autocorr) |
 | **Joint F-tests** | PASS | All variable groups significant (p < 0.001) |
 | **Sanitation Variables** | PASS | Jointly significant (F test) |
@@ -321,11 +321,13 @@ This document includes:
 | Criterion | Model A | Model B | Model C (M13) |
 |-----------|---------|---------|---------------|
 | **R²** | 0.1568 | 0.1782 | 0.1776 ✓ |
-| **VIF (Multicollinearity)** | 9.07 | 115.19 | 3.73 ✓ |
+| **Adjusted GVIF^(1/(2*Df))** | 9.07 | 115.19 | 3.73 ✓ |
 | **Interpretability** | Good | Complex | Excellent ✓ |
 | **Specification** | Simple | Over-parameterized | Parsimonious ✓ |
 | **State FE** | No | No | Yes ✓ |
 | **Interaction Term** | No | Yes | Yes ✓ |
+
+**Note on GVIF:** The values shown are adjusted GVIF^(1/(2*Df)), the appropriate metric for models with categorical variables. Model B shows raw GVIF of 115.19 due to severe multicollinearity from interaction terms, whereas M13's adjusted GVIF of 3.73 indicates excellent multicollinearity profile.
 
 **Conclusion:** M13 balances model fit, parsimony, and specification quality—minimizing multicollinearity while capturing key heterogeneous effects.
 
