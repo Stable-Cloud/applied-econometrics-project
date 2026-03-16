@@ -12,7 +12,7 @@ library(tseries)
 library(moments)
 
 # Load data
-data <- read.csv("../final_sanitation_bmi_dataset.csv")
+data <- read.csv("final_sanitation_bmi_dataset.csv")
 
 # Variable construction (same as final_analysis.r)
 factor_vars <- c("education_level","wealth","urban",

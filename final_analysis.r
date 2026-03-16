@@ -36,7 +36,7 @@ for (pkg in required_packages) {
 ############################################################
 
 # Use relative path (works from the project root)
-data <- read.csv("../final_sanitation_bmi_dataset.csv")
+data <- read.csv("final_sanitation_bmi_dataset.csv")
 
 cat("\n================================================================\n")
 cat("  FINAL MODEL COMPARISON – Sanitation & BMI (NFHS-5)\n")
